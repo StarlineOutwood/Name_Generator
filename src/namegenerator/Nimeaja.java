@@ -1,5 +1,6 @@
 package namegenerator;
 
+<<<<<<< HEAD
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -9,6 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
+=======
+import java.util.Random;
+>>>>>>> 6f930749f0f6c5dd59502707d4786aa8a6c4b302
 
 public class Nimeaja {
 	private StringBuilder nimi;
@@ -16,6 +20,7 @@ public class Nimeaja {
 	private Solmu nyt;
 	private int sanaryhmia;
 	private String tiedosto;
+<<<<<<< HEAD
 	private List<Solmu> puu;
 	
 	/**
@@ -34,6 +39,14 @@ public class Nimeaja {
 	 */
 	public Nimeaja() {
 		this.tiedosto="kirjaindata"; //Default tiedosto
+=======
+	
+	/**
+	 * Muodostetaan niemäjä
+	 */
+	public Nimeaja() {
+		//Tähän tulee "Lue tämä tiedosto" missä on puun tiedot valmiina, josta voidaan luoda puu
+>>>>>>> 6f930749f0f6c5dd59502707d4786aa8a6c4b302
 	}
 	
 	/**
@@ -44,6 +57,7 @@ public class Nimeaja {
 		return sanaryhmia;
 	}
 	
+<<<<<<< HEAD
 	public String GetTiedosto() {
 		return tiedosto;
 	}
@@ -52,6 +66,8 @@ public class Nimeaja {
 		tiedosto=uusi;
 	}
 	
+=======
+>>>>>>> 6f930749f0f6c5dd59502707d4786aa8a6c4b302
 	/**
 	 * Palauttaa tähän asti muodostetun nimen
 	 * @return
@@ -60,6 +76,7 @@ public class Nimeaja {
 		return nimi;
 	}
 	
+<<<<<<< HEAD
 	public void SetPuu(List<Solmu> uusi) {
 		puu=uusi;
 	}
@@ -68,6 +85,8 @@ public class Nimeaja {
 		return puu;
 	}
 	
+=======
+>>>>>>> 6f930749f0f6c5dd59502707d4786aa8a6c4b302
 	/**
 	 * Asettaa uuden nimen (kun kirjaimia lisätään
 	 * @param uusi : uusi nimi
@@ -104,6 +123,7 @@ public class Nimeaja {
 		nyt = uusi;
 	}
 	
+<<<<<<< HEAD
 	public void SetJuuri(Solmu uusi) {
 		juuri = uusi;
 	}
@@ -112,6 +132,8 @@ public class Nimeaja {
 		return juuri;
 	}
 	
+=======
+>>>>>>> 6f930749f0f6c5dd59502707d4786aa8a6c4b302
 	/**
 	 * Lisää kirjaimen sanaan
 	 * @param nimi : nimi johon lisätään
@@ -132,6 +154,7 @@ public class Nimeaja {
 	}
 	
     public void lueTiedosto(String nimi) {
+<<<<<<< HEAD
     	List<Solmu> puu = new ArrayList<Solmu>();
         SetTiedosto(nimi);
         try (Scanner fi = new Scanner(new FileInputStream(new File(nimi)))) { // Jotta UTF8/ISO-8859 toimii
@@ -142,6 +165,16 @@ public class Nimeaja {
                     puu =uusi.Parse(s, puu);
                     if (uusi.OnkoJuuri()) SetJuuri(uusi);
                     SetPuu(puu);
+=======
+        SetTiedostonNimi(nimi);
+        try (Scanner fi = new Scanner(new FileInputStream(new File(getTiedostonNimi())))) { // Jotta UTF8/ISO-8859 toimii
+            while ( fi.hasNext() ) {
+                try {
+                    String s = fi.nextLine();
+                    ToDo uusi = new ToDo();
+                    uusi.parse(s, true);
+                    lisaa(uusi);
+>>>>>>> 6f930749f0f6c5dd59502707d4786aa8a6c4b302
                 } catch (NumberFormatException ex){
                     //
                 }
@@ -150,6 +183,7 @@ public class Nimeaja {
             System.err.println("Tiedosto ei aukea! " + ex.getMessage());
         }
     }
+<<<<<<< HEAD
     
     public void talleta(String nimi) {
         try (PrintStream fo = new PrintStream(new FileOutputStream(nimi, false))){
@@ -176,6 +210,12 @@ public class Nimeaja {
 		Solmu uusi = new Solmu("RavenClaw", n.GetJuuri());
 		n.GetPuu().add(uusi);
 		n.talleta(n.GetTiedosto());
+=======
+
+	
+	public static void Main(String[] Args) {
+		
+>>>>>>> 6f930749f0f6c5dd59502707d4786aa8a6c4b302
 	}
 	
 }

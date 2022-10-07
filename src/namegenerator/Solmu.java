@@ -30,12 +30,17 @@ public class Solmu {
 
 	}
 	
+<<<<<<< HEAD
 	/**
 	 * Solmun alustus, kun ei ole mitään tietoja
 	 */
 	public Solmu() {
 		lapset = new Solmu[5];
 		seuraavaID = seuraavaID+1;
+=======
+	public Solmu() {
+		lapset = new Solmu[5];
+>>>>>>> 6f930749f0f6c5dd59502707d4786aa8a6c4b302
 	}
 	
 	/**
@@ -64,42 +69,57 @@ public class Solmu {
 		return null;
 	}
 	
+<<<<<<< HEAD
 	/**
 	 * Palauttaa solmun id:n
 	 * @return solmun id
 	 */
+=======
+>>>>>>> 6f930749f0f6c5dd59502707d4786aa8a6c4b302
 	public int GetID() {
 		return id;
 	}
 	
+<<<<<<< HEAD
 	/**
 	 * asettaa id:n solmulle (Kun luetaan tiedostosta)
 	 * @param uusi uusi id
 	 */
+=======
+>>>>>>> 6f930749f0f6c5dd59502707d4786aa8a6c4b302
 	public void SetID(int uusi) {
 		id=uusi;
 	}
 	
+<<<<<<< HEAD
 	/**
 	 * palauttaa tiedon, onko juuri juurisolmu
 	 * @return onko juuri juurisolmu
 	 */
+=======
+>>>>>>> 6f930749f0f6c5dd59502707d4786aa8a6c4b302
 	public boolean OnkoJuuri() {
 		return juuri;
 	}
 	
+<<<<<<< HEAD
 	/**
 	 * asettaa tiedon siitä, onko solmu juurisolmu
 	 * @param onko solmu juurisolmu
 	 */
+=======
+>>>>>>> 6f930749f0f6c5dd59502707d4786aa8a6c4b302
 	public void OnkoJuuri(boolean onko) {
 		juuri=onko;
 	}
 	
+<<<<<<< HEAD
 	/**
 	 * Asettaa solmulle nime
 	 * @param uusi nimi
 	 */
+=======
+>>>>>>> 6f930749f0f6c5dd59502707d4786aa8a6c4b302
 	public void SetNimi(String uusi) {
 		nimi = uusi;
 	}
@@ -145,18 +165,24 @@ public class Solmu {
 		return lapsia;
 	}
 	
+<<<<<<< HEAD
 	/**
 	 * Hakee solmun vanhemman id:n
 	 * @return solmun vanhemman id
 	 */
+=======
+>>>>>>> 6f930749f0f6c5dd59502707d4786aa8a6c4b302
 	public int GetParentID() {
 		return parent.GetID();
 	}
 	
+<<<<<<< HEAD
 	/**
 	 * Asettaa solmulle vanhemman
 	 * @param uusi uusi vanhempi
 	 */
+=======
+>>>>>>> 6f930749f0f6c5dd59502707d4786aa8a6c4b302
 	public void SetParent(Solmu uusi) {
 		parent = uusi;
 	}
@@ -195,10 +221,13 @@ public class Solmu {
 		lapset = uusilista;
 	}
 	
+<<<<<<< HEAD
 	/**
 	 * Muokkaa solmun tiedot stringiksi
 	 * @return solmun tiedot stringinä
 	 */
+=======
+>>>>>>> 6f930749f0f6c5dd59502707d4786aa8a6c4b302
 	public String ToString() {
 		StringBuilder sb = new StringBuilder(GetNimi()+ ":");
 		sb.append(GetKaynnit() + ":"+ GetID() + ":");
@@ -210,12 +239,15 @@ public class Solmu {
 		return sb.toString();
 	}
 	
+<<<<<<< HEAD
 	/**
 	 * tekee annetusta stringistä solmun
 	 * @param solmut se string josta solmu tehdään
 	 * @param puu puu johon solmu liitetään
 	 * @return
 	 */
+=======
+>>>>>>> 6f930749f0f6c5dd59502707d4786aa8a6c4b302
 	public List<Solmu> Parse(String solmut, List<Solmu> puu) {
 		String[] tiedot = solmut.split(":");
 		this.SetNimi(tiedot[0]);
@@ -229,7 +261,10 @@ public class Solmu {
 					solmu.SetLapsi(this);
 					this.SetParent(solmu);
 					puu.add(this);
+<<<<<<< HEAD
 					return puu;
+=======
+>>>>>>> 6f930749f0f6c5dd59502707d4786aa8a6c4b302
 				}
 			}
 		}

@@ -1,5 +1,6 @@
 package namegenerator;
 
+<<<<<<< HEAD
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -111,5 +112,9 @@ public class Opetus {
             System.err.println("Tiedosto ei aukea! " + ex.getMessage());
         }
     }
+=======
+public class Opetus {
+	private int lukumaara; //kuinka monta sanaa ollaan käyty läpi
+>>>>>>> 6f930749f0f6c5dd59502707d4786aa8a6c4b302
 	
 }
