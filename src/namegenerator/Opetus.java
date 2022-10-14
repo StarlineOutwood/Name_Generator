@@ -1,25 +1,29 @@
 package namegenerator;
 
-<<<<<<< HEAD
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class Opetus {
 	private int lukumaara; //kuinka monta sanaa ollaan käyty läpi
-	private List<Solmu> puu;
+	private Trie puu;
 	private String tiedosto;
 	private Solmu juuri;
 	private Solmu nyt;
 	private int sanaryhmia = 0;
+	private int taso;
 	
-	public Opetus() {
-		this.tiedosto = "kirjaindata";
-		this.juuri = new Solmu("juuri");
-		this.nyt = juuri;
+	public Opetus(int taso) {
+		this.tiedosto = "nimet";
+		this.puu = new Trie(taso);
+		this.juuri = puu.GetRoot();
+		this.nyt = puu.GetRoot();
+		this.taso = taso;
 	}
 	
 	public String GetTiedosto() {
@@ -38,6 +42,10 @@ public class Opetus {
 		return nyt;
 	}
 	
+	public Trie GetPuu() {
+		return puu;
+	}
+	
 	/**
 	 * Asetetaan uusi käsiteltävä solmu
 	 * @param uusi : uusi käsiteltävä solmu
@@ -46,6 +54,14 @@ public class Opetus {
 		nyt = uusi;
 	}
 	
+	public int GetTaso() {
+		return taso;
+	}
+	
+	public void SetTaso(int uusi) {
+		taso = uusi;
+		lueTiedosto(tiedosto, taso);
+	}
 	/**
 	 * asettaa uuden juuren
 	 * @param uusi uusi juuri
@@ -70,31 +86,19 @@ public class Opetus {
 		return sanaryhmia;
 	}
 	
-	public void OpetaNimi(String nimi) {
-		nimi.toLowerCase();
-		for(int i = 0; i<(nimi.length()-1); i++) {
-			String tutkittava = nimi.substring(i, i+2);
+	public void OpetaNimi(String nimi, int taso) {
+		nimi = nimi.toLowerCase();
+		for(int i = 0; i<(nimi.length()-(taso-1)); i++) {
+			String tutkittava = nimi.substring(i, i+taso);
 			OpetaMerkkijono(tutkittava);
 		}
 	}
 	
 	public void OpetaMerkkijono(String patka) {
-		GetJuuri().SetKaynnit(GetJuuri().GetKaynnit() + 1);
-		char kirjain = patka.charAt(0);
-		for (int i = 0; i < GetNyt().GetLapsia(); i++) {
-			char vertaus = GetNyt().GetLapsi(i).GetNimi().charAt(0);
-				if (kirjain == vertaus) {
-					SetNyt(GetNyt().GetLapsi(i));
-					GetNyt().SetKaynnit(GetNyt().GetKaynnit() + 1);
-				}
-				else {
-					Solmu uusi = new Solmu(String.valueOf(kirjain), GetNyt());
-					puu.add(uusi);
-				}
-		}
+		GetPuu().OpetaMerkkijono(patka);
 	}
 	
-    public void lueTiedosto(String nimi) {
+    public void lueTiedosto(String nimi, int taso) {
         SetTiedosto(nimi);
         try (Scanner fi = new Scanner(new FileInputStream(new File(nimi)))) { // Jotta UTF8/ISO-8859 toimii
             while ( fi.hasNext() ) {
@@ -102,7 +106,7 @@ public class Opetus {
                     String s = fi.nextLine();
                     String[] nimet = s.split(":");
                     for (String uusiNimi : nimet) {
-                    	OpetaNimi(uusiNimi);
+                    	OpetaNimi(uusiNimi, taso);
                     }
                 } catch (NumberFormatException ex){
                     //
@@ -112,9 +116,23 @@ public class Opetus {
             System.err.println("Tiedosto ei aukea! " + ex.getMessage());
         }
     }
-=======
-public class Opetus {
-	private int lukumaara; //kuinka monta sanaa ollaan käyty läpi
->>>>>>> 6f930749f0f6c5dd59502707d4786aa8a6c4b302
+    
+    public void talleta(String nimi) {
+        try (PrintStream fo = new PrintStream(new FileOutputStream(nimi, false))){
+            StringBuilder kaikkiRivit = new StringBuilder();
+            fo.println(GetPuu().ToString());
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+    
+    public static void main(String args[]) {
+    	Opetus ope = new Opetus(3);
+    	ope.lueTiedosto(ope.GetTiedosto(), ope.GetTaso());
+    	System.out.println(ope.GetJuuri().GetLapsi(0).GetNimi());
+    	System.out.println(ope.GetJuuri().GetLapsi(0).GetLapsi(0).GetNimi());
+    	ope.talleta("kirjaindata");
+    }
 	
 }

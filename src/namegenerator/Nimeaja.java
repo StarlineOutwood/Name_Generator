@@ -1,6 +1,5 @@
 package namegenerator;
 
-<<<<<<< HEAD
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -10,9 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
-=======
-import java.util.Random;
->>>>>>> 6f930749f0f6c5dd59502707d4786aa8a6c4b302
 
 public class Nimeaja {
 	private StringBuilder nimi;
@@ -20,15 +16,16 @@ public class Nimeaja {
 	private Solmu nyt;
 	private int sanaryhmia;
 	private String tiedosto;
-<<<<<<< HEAD
-	private List<Solmu> puu;
+	private Trie puu;
 	
 	/**
 	 * muodostetaan niemäjä, jos meillä on jo tiedostossa valmiita tietoja
 	 * @param nimi tiedoston nimi
 	 */
-	public Nimeaja(String nimi) {
-		this.puu = new ArrayList<Solmu>();
+	public Nimeaja(String nimi, int taso) {
+		this.puu = new Trie(taso);
+		this.juuri = puu.GetRoot();
+		this.nyt = puu.GetRoot();
 		this.tiedosto = nimi;
 		lueTiedosto(tiedosto);
 		//Tähän tulee "Lue tämä tiedosto" missä on puun tiedot valmiina, josta voidaan luoda puu
@@ -39,14 +36,6 @@ public class Nimeaja {
 	 */
 	public Nimeaja() {
 		this.tiedosto="kirjaindata"; //Default tiedosto
-=======
-	
-	/**
-	 * Muodostetaan niemäjä
-	 */
-	public Nimeaja() {
-		//Tähän tulee "Lue tämä tiedosto" missä on puun tiedot valmiina, josta voidaan luoda puu
->>>>>>> 6f930749f0f6c5dd59502707d4786aa8a6c4b302
 	}
 	
 	/**
@@ -57,17 +46,22 @@ public class Nimeaja {
 		return sanaryhmia;
 	}
 	
-<<<<<<< HEAD
+	/**
+	 * hakee tiedoston nimen
+	 * @return tiedoston nimi
+	 */
 	public String GetTiedosto() {
 		return tiedosto;
 	}
 	
+	/**
+	 * asettaa tiedoston nimen
+	 * @param uusi uusi tiedoston nimi
+	 */
 	public void SetTiedosto(String uusi) {
 		tiedosto=uusi;
 	}
 	
-=======
->>>>>>> 6f930749f0f6c5dd59502707d4786aa8a6c4b302
 	/**
 	 * Palauttaa tähän asti muodostetun nimen
 	 * @return
@@ -76,17 +70,20 @@ public class Nimeaja {
 		return nimi;
 	}
 	
-<<<<<<< HEAD
-	public void SetPuu(List<Solmu> uusi) {
+	public void SetTrie(Trie uusi) {
 		puu=uusi;
+		SetNyt(uusi.GetNow());
+		SetJuuri(uusi.GetRoot());
 	}
 	
-	public List<Solmu> GetPuu(){
+	/**
+	 * hakee listan, jossa on kaikki solmut
+	 * @return lista, jossa on solmut eli puu
+	 */
+	public Trie GetTrie(){
 		return puu;
 	}
 	
-=======
->>>>>>> 6f930749f0f6c5dd59502707d4786aa8a6c4b302
 	/**
 	 * Asettaa uuden nimen (kun kirjaimia lisätään
 	 * @param uusi : uusi nimi
@@ -95,17 +92,6 @@ public class Nimeaja {
 		nimi=uusi;
 	}
 	
-	/***
-	 * Muodostaa nimen
-	 * @return uusi nimi
-	 */
-	public StringBuilder LuoUusi() {
-		nimi = new StringBuilder("");
-		KirjaimenLisays(nimi, juuri);
-		KirjaimenLisays(nimi, GetNyt());
-		KirjaimenLisays(nimi, GetNyt());
-		return nimi;
-	}
 	
 	/**
 	 * Palauttaa sen solmun, jota käsitellään nyt (Eli mikä poistuu käsiteltävästä stringipätkästä seuraavalla kierroksella)
@@ -120,20 +106,54 @@ public class Nimeaja {
 	 * @param uusi : uusi käsiteltävä solmu
 	 */
 	public void SetNyt(Solmu uusi) {
+		GetTrie().SetNow(uusi);
 		nyt = uusi;
 	}
 	
-<<<<<<< HEAD
+	/**
+	 * asettaa uuden juuren
+	 * @param uusi uusi juuri
+	 */
 	public void SetJuuri(Solmu uusi) {
+		GetTrie().SetRoot(uusi);
 		juuri = uusi;
 	}
 	
+	/**
+	 * palauttaa juuren
+	 * @return juuri
+	 */
 	public Solmu GetJuuri() {
 		return juuri;
 	}
 	
-=======
->>>>>>> 6f930749f0f6c5dd59502707d4786aa8a6c4b302
+	/***
+	 * Muodostaa nimen
+	 * @return uusi nimi
+	 */
+	public String LuoUusi(int pituus, int taso) {
+		SetNimi(new StringBuilder(""));
+		SetNyt(GetJuuri());
+		KirjaimenLisays(GetNimi(), GetJuuri());
+		for(int i = 0; i < taso-1; i++) {
+			KirjaimenLisays(GetNimi(), GetNyt());
+		}
+		for(int i = 1; i < pituus - 2; i++) {
+			SetNyt(GetJuuri());
+			for (int j = 0; j < taso-1; j++) {
+				String now = String.valueOf(GetNimi().charAt(i+j));
+				SetNyt(GetNyt().GetLapsiS(now));
+			}
+			if (GetNyt() == null) {
+				String output = GetNimi().substring(0,1).toUpperCase() + GetNimi().substring(1);
+				return output;
+			}
+			KirjaimenLisays(GetNimi(), GetNyt());
+		}
+		String output = GetNimi().substring(0,1).toUpperCase() + GetNimi().substring(1);
+		return output;	
+	}
+	
 	/**
 	 * Lisää kirjaimen sanaan
 	 * @param nimi : nimi johon lisätään
@@ -141,40 +161,32 @@ public class Nimeaja {
 	 */
 	public void KirjaimenLisays(StringBuilder nimi, Solmu vanhempi) {
 		Random random = new Random();
-		int luku = random.nextInt(GetSanaryhmia(), 0) +1;
+		int luku = random.nextInt(0, vanhempi.GetKaynnit()) +1;
 		int aloitus = 0;
 		for (int i = 0; i < vanhempi.GetLapsia();i++) {
 			aloitus += vanhempi.GetLapsi(i).GetKaynnit();
 			if (luku <= aloitus) {
 				nimi.append(vanhempi.GetLapsi(i).GetNimi());
 				SetNyt(vanhempi.GetLapsi(i));
-				i = vanhempi.GetLapsia();
+				SetNimi(nimi);
+				return;
 			}
 		}
 	}
 	
-    public void lueTiedosto(String nimi) {
-<<<<<<< HEAD
-    	List<Solmu> puu = new ArrayList<Solmu>();
+	/**
+	 * Lukee tiedoston ja luo sen pohjalta solmut
+	 * @param nimi Tämän tiedoston lukee
+	 */
+    public Trie lueTiedosto(String nimi) {
         SetTiedosto(nimi);
         try (Scanner fi = new Scanner(new FileInputStream(new File(nimi)))) { // Jotta UTF8/ISO-8859 toimii
             while ( fi.hasNext() ) {
                 try {
                     String s = fi.nextLine();
                     Solmu uusi = new Solmu();
-                    puu =uusi.Parse(s, puu);
+                    uusi.Parse(s, GetTrie());
                     if (uusi.OnkoJuuri()) SetJuuri(uusi);
-                    SetPuu(puu);
-=======
-        SetTiedostonNimi(nimi);
-        try (Scanner fi = new Scanner(new FileInputStream(new File(getTiedostonNimi())))) { // Jotta UTF8/ISO-8859 toimii
-            while ( fi.hasNext() ) {
-                try {
-                    String s = fi.nextLine();
-                    ToDo uusi = new ToDo();
-                    uusi.parse(s, true);
-                    lisaa(uusi);
->>>>>>> 6f930749f0f6c5dd59502707d4786aa8a6c4b302
                 } catch (NumberFormatException ex){
                     //
                 }
@@ -182,16 +194,16 @@ public class Nimeaja {
         } catch (FileNotFoundException ex) {
             System.err.println("Tiedosto ei aukea! " + ex.getMessage());
         }
+        return GetTrie();
     }
-<<<<<<< HEAD
     
+    /**
+     * Tallentaa kaikki solmut tiedostoon
+     * @param nimi mihin tiedostoon tallennetaan
+     */
     public void talleta(String nimi) {
         try (PrintStream fo = new PrintStream(new FileOutputStream(nimi, false))){
-            StringBuilder kaikkiRivit = new StringBuilder();
-            for(Solmu solmu : GetPuu()) {
-                kaikkiRivit.append(solmu.ToString() + "\n");                
-            }
-            fo.println(kaikkiRivit);
+            fo.println(GetTrie().ToString());
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -199,23 +211,23 @@ public class Nimeaja {
     }
 
 
-	
+	/**
+	 * Testailua, että kaikki toimii
+	 * @param Args args jos halutaan
+	 */
 	public static void main(String[] Args) {
+		int taso = 3;
+		//Opetus ope = new Opetus(taso);
+		//ope.lueTiedosto("nimet", taso);
 		Nimeaja n = new Nimeaja();
-		System.out.println("Nyt alkaa");
-		n.lueTiedosto("testiLukuKirjoitus");
-		System.out.println(n.GetJuuri().GetNimi());
-		n.SetNyt(n.GetJuuri().GetLapsi(0));
-		System.out.println(n.GetNyt().GetNimi());
-		Solmu uusi = new Solmu("RavenClaw", n.GetJuuri());
-		n.GetPuu().add(uusi);
-		n.talleta(n.GetTiedosto());
-=======
-
-	
-	public static void Main(String[] Args) {
-		
->>>>>>> 6f930749f0f6c5dd59502707d4786aa8a6c4b302
+		n.SetTrie(new Trie(taso));
+		n.SetTrie(n.lueTiedosto("kirjaindata"));
+		for (int i = 0; i < 5; i++) {
+			System.out.println(n.LuoUusi(5, taso));
+			System.out.println(n.LuoUusi(8, taso));
+			System.out.println(n.LuoUusi(7, taso));
+			System.out.println(n.LuoUusi(6, taso));
+		}
 	}
 	
 }

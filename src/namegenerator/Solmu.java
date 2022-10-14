@@ -30,17 +30,12 @@ public class Solmu {
 
 	}
 	
-<<<<<<< HEAD
 	/**
 	 * Solmun alustus, kun ei ole mitään tietoja
 	 */
 	public Solmu() {
 		lapset = new Solmu[5];
 		seuraavaID = seuraavaID+1;
-=======
-	public Solmu() {
-		lapset = new Solmu[5];
->>>>>>> 6f930749f0f6c5dd59502707d4786aa8a6c4b302
 	}
 	
 	/**
@@ -62,64 +57,49 @@ public class Solmu {
 	 * @param merkki minkä kirjaimen nimimen lapsi halutaan löytää
 	 * @return palauttaa lapsen, jos sellainen löytyy, jos ei, se palauttaa nullin
 	 */
-	public Solmu GetLapsi(String merkki) {
+	public Solmu GetLapsiS(String merkki) {
 		for (int i = 0; i<lapsia; i++) {
-			if(lapset[i].GetNimi() == merkki) return lapset[i];
+			if(lapset[i].GetNimi().equals(merkki)) return lapset[i];
 		}
 		return null;
 	}
 	
-<<<<<<< HEAD
 	/**
 	 * Palauttaa solmun id:n
 	 * @return solmun id
 	 */
-=======
->>>>>>> 6f930749f0f6c5dd59502707d4786aa8a6c4b302
 	public int GetID() {
 		return id;
 	}
 	
-<<<<<<< HEAD
 	/**
 	 * asettaa id:n solmulle (Kun luetaan tiedostosta)
 	 * @param uusi uusi id
 	 */
-=======
->>>>>>> 6f930749f0f6c5dd59502707d4786aa8a6c4b302
 	public void SetID(int uusi) {
 		id=uusi;
 	}
 	
-<<<<<<< HEAD
 	/**
 	 * palauttaa tiedon, onko juuri juurisolmu
 	 * @return onko juuri juurisolmu
 	 */
-=======
->>>>>>> 6f930749f0f6c5dd59502707d4786aa8a6c4b302
 	public boolean OnkoJuuri() {
 		return juuri;
 	}
 	
-<<<<<<< HEAD
 	/**
 	 * asettaa tiedon siitä, onko solmu juurisolmu
 	 * @param onko solmu juurisolmu
 	 */
-=======
->>>>>>> 6f930749f0f6c5dd59502707d4786aa8a6c4b302
 	public void OnkoJuuri(boolean onko) {
 		juuri=onko;
 	}
 	
-<<<<<<< HEAD
 	/**
 	 * Asettaa solmulle nime
 	 * @param uusi nimi
 	 */
-=======
->>>>>>> 6f930749f0f6c5dd59502707d4786aa8a6c4b302
 	public void SetNimi(String uusi) {
 		nimi = uusi;
 	}
@@ -165,24 +145,18 @@ public class Solmu {
 		return lapsia;
 	}
 	
-<<<<<<< HEAD
 	/**
 	 * Hakee solmun vanhemman id:n
 	 * @return solmun vanhemman id
 	 */
-=======
->>>>>>> 6f930749f0f6c5dd59502707d4786aa8a6c4b302
 	public int GetParentID() {
 		return parent.GetID();
 	}
 	
-<<<<<<< HEAD
 	/**
 	 * Asettaa solmulle vanhemman
 	 * @param uusi uusi vanhempi
 	 */
-=======
->>>>>>> 6f930749f0f6c5dd59502707d4786aa8a6c4b302
 	public void SetParent(Solmu uusi) {
 		parent = uusi;
 	}
@@ -221,13 +195,10 @@ public class Solmu {
 		lapset = uusilista;
 	}
 	
-<<<<<<< HEAD
 	/**
 	 * Muokkaa solmun tiedot stringiksi
 	 * @return solmun tiedot stringinä
 	 */
-=======
->>>>>>> 6f930749f0f6c5dd59502707d4786aa8a6c4b302
 	public String ToString() {
 		StringBuilder sb = new StringBuilder(GetNimi()+ ":");
 		sb.append(GetKaynnit() + ":"+ GetID() + ":");
@@ -239,32 +210,29 @@ public class Solmu {
 		return sb.toString();
 	}
 	
-<<<<<<< HEAD
 	/**
 	 * tekee annetusta stringistä solmun
 	 * @param solmut se string josta solmu tehdään
-	 * @param puu puu johon solmu liitetään
+	 * @param puu.GetPuu() puu johon solmu liitetään
 	 * @return
 	 */
-=======
->>>>>>> 6f930749f0f6c5dd59502707d4786aa8a6c4b302
-	public List<Solmu> Parse(String solmut, List<Solmu> puu) {
+	public Trie Parse(String solmut, Trie puu) {
 		String[] tiedot = solmut.split(":");
 		this.SetNimi(tiedot[0]);
 		this.SetKaynnit(Integer.parseInt(tiedot[1]));
 		this.SetID(Integer.parseInt(tiedot[2]));
 		this.OnkoJuuri(Boolean.parseBoolean(tiedot[3]));
-		if (OnkoJuuri()) puu.add(this);
+		if (OnkoJuuri()) {
+			puu.GetTree().add(this); 
+			puu.SetRoot(this);
+		}
 		else {
-			for (Solmu solmu : puu){
+			for (Solmu solmu : puu.GetTree()){
 				if (solmu.GetID()==Integer.parseInt(tiedot[4])) {
 					solmu.SetLapsi(this);
 					this.SetParent(solmu);
-					puu.add(this);
-<<<<<<< HEAD
+					puu.GetTree().add(this);
 					return puu;
-=======
->>>>>>> 6f930749f0f6c5dd59502707d4786aa8a6c4b302
 				}
 			}
 		}
@@ -275,39 +243,9 @@ public class Solmu {
 	 * Maini, testaillaan luokan toimintaa
 	 * @param Arg
 	 */
+	@SuppressWarnings("unused")
 	public static void main(String[] Arg) {
-		List<Solmu> lista = new ArrayList<Solmu>();
-		Solmu juuri = new Solmu("Tuvat");
-		lista.add(juuri);
-		Solmu lapsi1 = new Solmu("Gryffindor", juuri);
-		Solmu lapsi2 = new Solmu("Slytherin", juuri);
-		lista.add(lapsi1);
-		lista.add(lapsi2);
-		
-		Solmu oppilas1 = new Solmu("Ron", lapsi1);
-		Solmu oppilas2 = new Solmu("Harry", lapsi1);
-		Solmu oppilas3 = new Solmu("Hermione", lapsi1);
-		Solmu oppilas4 = new Solmu("Neville", lapsi1);
-		Solmu oppilas5 = new Solmu("Ginny", lapsi1);
-		Solmu oppilas6 = new Solmu("Fred", lapsi1);
-		
-		Solmu lemmikki1 = new Solmu("Hedwig", oppilas2);
-		
-		System.out.println(juuri.GetLapsi(0).GetNimi());
-		System.out.println(juuri.GetLapsi(1).GetNimi());
-		System.out.println(lapsi1.GetLapsi(0).GetNimi());
-		System.out.println(lapsi1.GetLapsia());
-		System.out.println(lapsi1.GetLapsi(5).GetNimi());
-		System.out.println(oppilas1.GetID());
-		System.out.println(oppilas2.GetID());
-		System.out.println(lapsi1.ToString());
-		
-		Solmu uusi = new Solmu();
-		lista = uusi.Parse("Huffelpuf:0:17:false:0:", lista);
-		System.out.println(uusi.GetNimi());
-		
-		
-		
+				
 	}
 
 }
