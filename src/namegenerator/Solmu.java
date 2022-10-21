@@ -181,6 +181,7 @@ public class Solmu {
 		}
 	}
 	
+
 	/**
 	 * Lisää paikkoja solmujen taulukkoon
 	 * @param uusi : uusi solmu, joka ei mahtunut edelliseen taulukkoon
@@ -198,13 +199,23 @@ public class Solmu {
 	/**
 	 * Muokkaa solmun tiedot stringiksi
 	 * @return solmun tiedot stringinä
+	 * <example>
+	 * <pre name="test">
+	 * Solmu testi = new Solmu();
+	 * testi.SetNimi("juuri");
+	 * testi.SetKaynnit(5);
+	 * testi.SetID(10);
+	 * testi.OnkoJuuri(true);
+     * System.out.println(testi.ToString().equals("juuri:5:10:true:"));
+     * </pre>
+     *</example>
 	 */
 	public String ToString() {
 		StringBuilder sb = new StringBuilder(GetNimi()+ ":");
 		sb.append(GetKaynnit() + ":"+ GetID() + ":");
 		sb.append(OnkoJuuri()+ ":");
 		if (!OnkoJuuri()) sb.append(GetParentID()+":");
-		for (int i = 0; i < lapsia; i++) {
+		for (int i = 0; i < GetLapsia(); i++) {
 			sb.append(GetLapsi(i).GetID()+":");
 		}
 		return sb.toString();
@@ -214,7 +225,16 @@ public class Solmu {
 	 * tekee annetusta stringistä solmun
 	 * @param solmut se string josta solmu tehdään
 	 * @param puu.GetPuu() puu johon solmu liitetään
-	 * @return
+	 * @return puu, johon uusi solmu on lisärry kokoon
+	 * <example>
+	 * <pre name="test">
+	 * Trie puu = new Trie(3);
+	 * Solmu uusi = new Solmu();
+	 * String rimpsu = "juuri:5:10:true:";
+	 * uusi.Parse(rimpsu, puu);
+     * uusi.GetID() ~~~ 10;
+     * </pre>
+     *</example>
 	 */
 	public Trie Parse(String solmut, Trie puu) {
 		String[] tiedot = solmut.split(":");
@@ -245,7 +265,11 @@ public class Solmu {
 	 */
 	@SuppressWarnings("unused")
 	public static void main(String[] Arg) {
-				
+		  Trie puu = new Trie(3);
+		  Solmu uusi = new Solmu();
+		  String rimpsu = "juuri:5:10:true:";
+		  uusi.Parse(rimpsu, puu);
+	      System.out.println(uusi.GetID() == 10);
 	}
 
 }

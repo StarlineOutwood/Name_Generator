@@ -31,6 +31,10 @@ public class Trie {
 		now = uusi;
 	}
 	
+	/**
+	 * Palauttaa minkä tasoinen puu on
+	 * @return taso
+	 */
 	public int GetTaso() {
 		return taso;
 	}
@@ -43,10 +47,18 @@ public class Trie {
 		root = uusi;
 	}
 	
+	/**
+	 * palauttaa kaikki puun solmut listassa
+	 * @return kaikki solmut
+	 */
 	public List<Solmu> GetTree(){
 		return kaikki;
 	}
 	
+	/**
+	 * asettaa uuden listan solmuja puun solmuiksi
+	 * @param uusi uusi lista solmuja
+	 */
 	public void SetTree(List<Solmu> uusi) {
 		kaikki = uusi;
 	}
@@ -59,6 +71,21 @@ public class Trie {
 		return root;
 	}
 	
+	/**
+	 * Opettaa merkkojonon puulle, eli lisää jonkon merkkijonon puuhun
+	 * @param patka merkkijono, joka lisätään
+	 * <example>
+	 * <pre name="test">
+	 * Trie puu = new Trie(3);
+	 * Solmu juuri = new Solmu (" ");
+	 * puu.SetRoot(juuri);
+	 * puu.SetNyt(juuri);
+	 * puu.GetTree().add(juuri);
+	 * puu.OpetaMerkkijono("abc");
+	 * puu.OpetaMerkkijono("acc");
+	 * puu.OpetaMerkkijono("bac");
+	 * puu.GetRoot().GetLapsiS("a").GetKaynnit() ~~~ 2;
+	 */
 	public void OpetaMerkkijono(String patka) {
 		SetNow(GetRoot());
 		GetRoot().SetKaynnit(GetRoot().GetKaynnit() + 1);
@@ -86,6 +113,11 @@ public class Trie {
 		}
 	}
 	
+	/**
+	 * muuttaa koko puun, eli kaikki solmut merkkijonoksi
+	 * Stringiksi muuttamisen testi tehty Solmussa itsessään, joten en koe tarvetta testata tätä
+	 * @return merkkijono, joka sisältää kaikki puun solmut
+	 */
 	public String ToString() {
 		StringBuilder sb = new StringBuilder();
 		for (Solmu solmu : kaikki) {
@@ -95,7 +127,15 @@ public class Trie {
 	}
 	
 	public static void main(String[] args) {
-		
+		 Trie puu = new Trie(3);
+		 Solmu juuri = new Solmu (" ");
+		 puu.SetRoot(juuri);
+		 puu.SetNow(juuri);
+		 puu.GetTree().add(juuri);
+		 puu.OpetaMerkkijono("abc");
+		 puu.OpetaMerkkijono("acc");
+		 puu.OpetaMerkkijono("bac");
+		 System.out.println(puu.GetRoot().GetLapsiS("a").GetKaynnit() == 2);
 	}
 	
 

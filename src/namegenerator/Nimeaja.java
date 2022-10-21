@@ -1,5 +1,6 @@
 package namegenerator;
 
+import java.io.Console;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -213,20 +214,30 @@ public class Nimeaja {
 
 	/**
 	 * Testailua, että kaikki toimii
-	 * @param Args args jos halutaan
+	 * @param Args args ei käytetä
 	 */
 	public static void main(String[] Args) {
+		System.out.println("Kielivlinta Suomi, kirjoita: Suomi");
+		System.out.println("Choose language English, Write: English");
+		Scanner scan = new Scanner(System.in);
+		String kieli = scan.next();
+		if (!kieli.equals("Suomi") && !kieli.equals("English")) {
+			System.out.println("Kirjoita kielivalinta isolla alkukirjaimella ja tarkista kirjoitusvirheet");
+			System.out.println("Write the name with a capital letter and chech for spelling mistakes");
+			return;
+		}
 		int taso = 3;
-		//Opetus ope = new Opetus(taso);
-		//ope.lueTiedosto("nimet", taso);
+		Opetus ope = new Opetus(taso, kieli);
+		ope.lueTiedosto(kieli, taso);
+		ope.talleta("kirjaindata");
 		Nimeaja n = new Nimeaja();
 		n.SetTrie(new Trie(taso));
 		n.SetTrie(n.lueTiedosto("kirjaindata"));
 		for (int i = 0; i < 5; i++) {
 			System.out.println(n.LuoUusi(5, taso));
-			System.out.println(n.LuoUusi(8, taso));
 			System.out.println(n.LuoUusi(7, taso));
-			System.out.println(n.LuoUusi(6, taso));
+			System.out.println(n.LuoUusi(9, taso));
+			System.out.println(n.LuoUusi(8, taso));
 		}
 	}
 	
