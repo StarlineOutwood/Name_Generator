@@ -111,6 +111,7 @@ public class Opetus {
 	 * Pilkkoo nimen palasiksi ja asettaa sen Trie-rakenteeseen
 	 * @param nimi tiedoston nimi
 	 * @param taso millä tasolla opetetaan
+	 * itse merkkijono testataan puussa, joten testailtu siellä
 	 */
 	public void OpetaNimi(String nimi, int taso) {
 		nimi = nimi.toLowerCase();
@@ -123,6 +124,7 @@ public class Opetus {
 	/**
 	 * Opettaa Trielle merkkijonon
 	 * @param patka
+	 * En koe tarvetta testata, se testataan puussa
 	 */
 	public void OpetaMerkkijono(String patka) {
 		GetPuu().OpetaMerkkijono(patka);
@@ -132,6 +134,16 @@ public class Opetus {
 	 * Lukee tiedostoa
 	 * @param nimi mitä teidostoa luetaan
 	 * @param taso millä tasolla sitä luetaan
+	 * <example>
+     * <pre name="test">
+     * Opetus ope = new Opetus(3, "testiNimet");
+     * ope.lueTiedosto("testiNimet", 3);
+     * ope.talleta("testiLukuKirjoitus");
+     * Nimeaja ope2 = new Nimeaja("testiLukuKirjoitus", 3);
+     * ope2.lueTiedosto(ope2.GetTiedosto());
+     * ope2.GetJuuri().GetKaynnit() ~~~ 8;
+     * </pre>
+     * </example>
 	 */
     public void lueTiedosto(String nimi, int taso) {
         SetTiedosto(nimi);
@@ -155,6 +167,17 @@ public class Opetus {
     /**
      * tallentaa valmiiksi saadin Trie-rakenten haluttuun tiedostoon
      * @param nimi tiedosto, johon tallennetaan
+     * <example>
+     * <pre name="test">
+     * Opetus ope = new Opetus(3, "testiLukuKirjoitus");
+     * Solmu yks = new Solmu();
+     * yks.parse("juuri:5:10:true:", ope.GetPuu());
+     * ope.talleta("testiLukuKirjoitus");
+     * Nimeaja ope2 = new Nimeaja("testiLukuKirjoitus", 3);
+     * ope2.lueTiedosto(ope2.GetTiedosto());
+     * ope2.GetJuuri().GetKaynnit() ~~~ 5;
+     * </pre>
+     * </example>
      */
     public void talleta(String nimi) {
         try (PrintStream fo = new PrintStream(new FileOutputStream(nimi, false))){
@@ -171,20 +194,38 @@ public class Opetus {
      * @param args ei käytetä
      */
     public static void main(String args[]) {
-		System.out.println("Kielivlinta Suomi, kirjoita: Suomi");
-		System.out.println("Choose language English, Write: English");
+		System.out.println("Kielivlinta Suomi, kirjoita: Fi");
+		System.out.println("Choose language English, Write: En");
 		Scanner scan = new Scanner(System.in);
 		String kieli = scan.next();
-		if (!kieli.equals("Suomi") && !kieli.equals("English")) {
+		if (!kieli.equals("Fi") && !kieli.equals("En")) {
 			System.out.println("Kirjoita kielivalinta isolla alkukirjaimella ja tarkista kirjoitusvirheet");
 			System.out.println("Write the name with a capital letter and chech for spelling mistakes");
 			return;
 		}
-    	Opetus ope = new Opetus(3, kieli);
+		String nimienKieli = "";
+		if (kieli.equals("Fi")) nimienKieli = "Suomi";
+		if (kieli.equals("En")) nimienKieli = "English";
+		Opetus ope = new Opetus(3, nimienKieli);
     	ope.lueTiedosto(ope.GetTiedosto(), ope.GetTaso());
     	System.out.println(ope.GetJuuri().GetLapsi(0).GetNimi());
     	System.out.println(ope.GetJuuri().GetLapsi(0).GetLapsi(0).GetNimi());
-    	ope.talleta("kirjaindata");
+    	ope.talleta(kieli);
+    	
+        Opetus ope1= new Opetus(3, "testiLukuKirjoitus");
+        Solmu yks = new Solmu();
+        yks.Parse("juuri:5:10:true:", ope1.GetPuu());
+        ope1.talleta("testiLukuKirjoitus");
+        Nimeaja ope2 = new Nimeaja("testiLukuKirjoitus", 3);
+        ope2.lueTiedosto(ope2.GetTiedosto());
+        System.out.println(ope2.GetJuuri().GetKaynnit() == 5);
+        
+        Opetus ope3 = new Opetus(3, "testiNimet");
+        ope3.lueTiedosto("testiNimet", 3);
+        ope3.talleta("testiLukuKirjoitus");
+        Nimeaja ope4 = new Nimeaja("testiLukuKirjoitus", 3);
+        ope4.lueTiedosto(ope4.GetTiedosto());
+        System.out.println(ope4.GetJuuri().GetKaynnit() == 8);
     }
 	
 }

@@ -131,6 +131,19 @@ public class Nimeaja {
 	/***
 	 * Muodostaa nimen
 	 * @return uusi nimi
+	 * <example>
+	 * <pre name="test">
+	 * Nimeaja testi = new Nimeaja("Fi", 3);
+	 * testi.Opi(3, "Fi");
+	 * String nimi = testi.LuoUusi(5, 3);
+	 * nimi = nimi.toLowerCase();
+	 * for(int i = 0; i < nimi.length() - 2; i++) {
+			testi.SetNyt(testi.GetJuuri().GetLapsiS(String.valueOf(nimi.charAt(i))));
+			testi.SetNyt(testi.GetNyt().GetLapsiS(String.valueOf(nimi.charAt(i+1))));
+			testi.SetNyt(testi.GetNyt().GetLapsiS(String.valueOf(nimi.charAt(i+2))));
+	 * }
+	 * </pre>
+	 * </example>
 	 */
 	public String LuoUusi(int pituus, int taso) {
 		SetNimi(new StringBuilder(""));
@@ -139,11 +152,15 @@ public class Nimeaja {
 		for(int i = 0; i < taso-1; i++) {
 			KirjaimenLisays(GetNimi(), GetNyt());
 		}
-		for(int i = 1; i < pituus - 2; i++) {
+		for(int i = 1; i < pituus - (taso-1); i++) {
 			SetNyt(GetJuuri());
 			for (int j = 0; j < taso-1; j++) {
 				String now = String.valueOf(GetNimi().charAt(i+j));
 				SetNyt(GetNyt().GetLapsiS(now));
+				if (GetNyt() == null) {
+					String output = GetNimi().substring(0,1).toUpperCase() + GetNimi().substring(1);
+					return output;
+				}
 			}
 			if (GetNyt() == null) {
 				String output = GetNimi().substring(0,1).toUpperCase() + GetNimi().substring(1);
@@ -159,6 +176,7 @@ public class Nimeaja {
 	 * Lisää kirjaimen sanaan
 	 * @param nimi : nimi johon lisätään
 	 * @param vanhempi : minkä solmun lapsia tarkastellaan
+	 * Testailtu mainissa
 	 */
 	public void KirjaimenLisays(StringBuilder nimi, Solmu vanhempi) {
 		Random random = new Random();
@@ -178,6 +196,17 @@ public class Nimeaja {
 	/**
 	 * Lukee tiedoston ja luo sen pohjalta solmut
 	 * @param nimi Tämän tiedoston lukee
+	 * <example>
+     * <pre name="test">
+     * Opetus ope = new Opetus(3, "testiLukuKirjoitus");
+     * Solmu yks = new Solmu();
+     * yks.parse("juuri:5:10:true:", ope.GetPuu());
+     * ope.talleta("testiLukuKirjoitus");
+     * Nimeaja ope2 = new Nimeaja("testiLukuKirjoitus", 3);
+     * ope2.lueTiedosto(ope2.GetTiedosto());
+     * ope2.GetJuuri().GetKaynnit() ~~~ 5;
+     * </pre>
+     * </example>
 	 */
     public Trie lueTiedosto(String nimi) {
         SetTiedosto(nimi);
@@ -201,6 +230,19 @@ public class Nimeaja {
     /**
      * Tallentaa kaikki solmut tiedostoon
      * @param nimi mihin tiedostoon tallennetaan
+     * <example>
+     * <pre name="test">
+     * Opetus ope = new Opetus(3, "testiLukuKirjoitus");
+     * Solmu yks = new Solmu();
+     * yks.parse("juuri:5:10:true:", ope.GetPuu());
+     * ope.talleta("testiLukuKirjoitus");
+     * Nimeaja ope2 = new Nimeaja("testiLukuKirjoitus", 3);
+     * ope2.lueTiedosto(ope2.GetTiedosto());
+     * ope2.talleta(ope2.GetTiedosto());
+     * ope2.lueTiedosto(ope2.GetTiedosto());
+     * ope.GetJuuri().GetKaynnit() ~~~ 5;
+     * </pre>
+     * </example>
      */
     public void talleta(String nimi) {
         try (PrintStream fo = new PrintStream(new FileOutputStream(nimi, false))){
@@ -210,6 +252,18 @@ public class Nimeaja {
             e.printStackTrace();
         }
     }
+    
+    /**
+     * opettaa tideostoon tietyn tasoisen Trie-rakenteen
+     * @param taso minkä tasoinen puu tehdään
+     * @param kieli Millä kielellä puu tehdään
+     */
+    public void Opi(int taso, String kieli) {
+		Opetus ope = new Opetus(taso, kieli);
+		if (kieli.equals("Fi")) ope.lueTiedosto("Suomi", taso);
+		if (kieli.equals("En")) ope.lueTiedosto("English", taso);
+		ope.talleta(kieli);
+    }
 
 
 	/**
@@ -217,27 +271,47 @@ public class Nimeaja {
 	 * @param Args args ei käytetä
 	 */
 	public static void main(String[] Args) {
-		System.out.println("Kielivlinta Suomi, kirjoita: Suomi");
-		System.out.println("Choose language English, Write: English");
+		boolean jatketaanko = true;
+		boolean oikea = true;
+		System.out.println("Kielivlinta Suomi, kirjoita: Fi");
+		System.out.println("Choose language English, Write: En");
 		Scanner scan = new Scanner(System.in);
 		String kieli = scan.next();
-		if (!kieli.equals("Suomi") && !kieli.equals("English")) {
-			System.out.println("Kirjoita kielivalinta isolla alkukirjaimella ja tarkista kirjoitusvirheet");
-			System.out.println("Write the name with a capital letter and chech for spelling mistakes");
+		kieli = kieli.substring(0,1).toUpperCase() + kieli.substring(1);
+		if (!kieli.equals("Fi") && !kieli.equals("En")) {
+			System.out.println("Tarkista kirjoitusvirheet");
+			System.out.println("Check for spelling mistakes");
 			return;
 		}
-		int taso = 3;
-		Opetus ope = new Opetus(taso, kieli);
-		ope.lueTiedosto(kieli, taso);
-		ope.talleta("kirjaindata");
-		Nimeaja n = new Nimeaja();
-		n.SetTrie(new Trie(taso));
-		n.SetTrie(n.lueTiedosto("kirjaindata"));
-		for (int i = 0; i < 5; i++) {
-			System.out.println(n.LuoUusi(5, taso));
-			System.out.println(n.LuoUusi(7, taso));
-			System.out.println(n.LuoUusi(9, taso));
-			System.out.println(n.LuoUusi(8, taso));
+		
+		while (jatketaanko) {
+			oikea = true;
+			if (kieli.equals("Fi")) System.out.println("Minkä pituisia nimiä haluat? Anna kirjainten määrä positiivisena kokonaislukuna");
+			if (kieli.equals("En")) System.out.println("How long names do you want? Give the number of characters as a positive whole number");
+			String pituusS = scan.next();
+			int pituus = Integer.valueOf(pituusS);
+			if (pituus > 1) {
+				while (oikea) {
+					if (kieli.equals("Fi")) System.out.println("Kuinka piykän markovin ketjun haluat? Anna positiivinen kokonaisluku (Suositellaan 3 tai 4)");
+					if (kieli.equals("En")) System.out.println("How long markov chan do you want? give a positive whole number (4 or 5 is recommended)");
+					String tasoS = scan.next();
+					int taso = Integer.valueOf(tasoS);
+					if (taso > 1) {
+						oikea = false;
+						Nimeaja n = new Nimeaja();
+						n.Opi(taso, kieli);
+						n.SetTrie(new Trie(taso));
+						n.SetTrie(n.lueTiedosto(kieli));
+						for (int i = 0; i < 20; i++) {
+							System.out.println(n.LuoUusi(pituus, taso));
+						}
+						if (kieli.equals("Fi")) System.out.println("Haluatko lisää nimiä? Y/N");
+						if (kieli.equals("En")) System.out.println("Do you want more names? Y/N");
+						String jatketaan = scan.next();
+						if (jatketaan.equalsIgnoreCase("N")) jatketaanko = false;
+					}
+				}
+			}
 		}
 	}
 	
